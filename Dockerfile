@@ -21,8 +21,7 @@ RUN apk add --no-cache \
 USER node
 
 # Устанавливаем canvas через npm
-RUN cd /usr/local/lib/node_modules/n8n && \
-    npm install canvas
+RUN npm install -g canvas
 
 # Возвращаемся к стандартной точке входа
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
