@@ -1,4 +1,5 @@
-﻿# Dockerfile для n8n с поддержкой Canvas на Railway
+# Dockerfile для n8n с поддержкой Canvas на Railway
+# ВАЖНО: Сохраните этот файл как "Dockerfile" (без расширения .txt)
 
 FROM n8nio/n8n:latest
 
@@ -17,11 +18,11 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev
 
-# Переключаемся на пользователя node
-USER node
-
-# Устанавливаем canvas через npm
+# Устанавливаем canvas глобально (доступен для всех node приложений)
 RUN npm install -g canvas
+
+# Переключаемся обратно на пользователя node
+USER node
 
 # Возвращаемся к стандартной точке входа
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
