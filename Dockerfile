@@ -1,28 +1,24 @@
-# Dockerfile для n8n с поддержкой Canvas на Railway
-# ВАЖНО: Сохраните этот файл как "Dockerfile" (без расширения .txt)
+# Dockerfile для n8n с Python и Pillow
 
 FROM n8nio/n8n:latest
 
-# Переключаемся на root для установки зависимостей
 USER root
 
-# Устанавливаем системные зависимости для canvas
+# Устанавливаем Python и зависимости для изображений
 RUN apk add --no-cache \
-    build-base \
-    cairo-dev \
-    jpeg-dev \
-    pango-dev \
-    giflib-dev \
-    pixman-dev \
-    pangomm-dev \
-    libjpeg-turbo-dev \
-    freetype-dev
+    python3 \
+    py3-pip \
+    py3-pillow \
+    freetype \
+    jpeg \
+    zlib
 
-# Устанавливаем canvas глобально (доступен для всех node приложений)
-RUN npm install -g canvas
+# Создаем симлинк для python
+RUN ln -sf python3 /usr/bin/python
 
-# Переключаемся обратно на пользователя node
+# Устанавливаем Pillow через pip (если нужна последняя версия)
+RUN pip3 install --break-system-packages Pillow
+
 USER node
 
-# Возвращаемся к стандартной точке входа
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
